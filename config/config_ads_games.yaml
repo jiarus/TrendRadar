@@ -8,19 +8,7 @@ schedule:
 
 platforms:
   enabled: false
-  sources:
-    - id: "weibo"
-      name: "微博"
-    - id: "douyin"
-      name: "抖音"
-    - id: "bilibili-hot-search"
-      name: "bilibili 热搜"
-    - id: "zhihu"
-      name: "知乎"
-    - id: "toutiao"
-      name: "今日头条"
-    - id: "tieba"
-      name: "贴吧"
+  sources: []
 
 rss:
   enabled: true
@@ -70,6 +58,14 @@ filter:
 notification:
   enabled: true
 
+ai:
+  model: "deepseek/deepseek-chat"
+  api_key: ""
+  api_base: ""
+  timeout: 120
+  temperature: 1.0
+  max_tokens: 5000
+
 storage:
   backend: "auto"
   formats:
@@ -99,7 +95,7 @@ display:
     - standalone
     - ai_analysis
   regions:
-    hotlist: true
+    hotlist: false
     new_items: false
     rss: true
     standalone: false
