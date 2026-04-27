@@ -28,9 +28,24 @@ rss:
     enabled: true
     max_age_days: 1
   feeds:
-    - id: "hacker-news"
-      name: "Hacker News"
-      url: "https://hnrss.org/frontpage"
+    - id: "gamesindustry-news"
+      name: "GamesIndustry News"
+      url: "https://www.gamesindustry.biz/feed/news"
+    - id: "gamedeveloper"
+      name: "Game Developer"
+      url: "https://www.gamedeveloper.com/rss.xml"
+    - id: "adweek"
+      name: "Adweek"
+      url: "https://www.adweek.com/feed/"
+    - id: "search-engine-land"
+      name: "Search Engine Land"
+      url: "https://searchengineland.com/feed"
+    - id: "martech"
+      name: "MarTech"
+      url: "https://martech.org/feed/"
+    - id: "social-media-today"
+      name: "Social Media Today"
+      url: "https://www.socialmediatoday.com/feeds/news/"
 
 report:
   mode: "incremental"
