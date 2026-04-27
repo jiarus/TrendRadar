@@ -1,44 +1,69 @@
-﻿# Alternative keyword file for second GitHub Actions workflow
-# File path: config/custom/keyword/frequency_words_alt.txt
+﻿# Ads & Games keyword file for dedicated workflow
+# File path: config/custom/keyword/frequency_words_ads_games.txt
 
 [GLOBAL_FILTER]
 sponsored
 软文
+抽奖
+明星
+八卦
 
 [WORD_GROUPS]
-[广告系统]
-广告系统
-广告平台
-广告引擎
-广告技术
-ad system
-
-[AI+广告]
-AI+广告
-AI 广告
-AIGC 广告
-人工智能 广告
-大模型 广告
-
-[广告投放]
-广告投放
-投放策略
-程序化广告
-程序化投放
-效果广告
-广告优化
-
-[游戏行业资讯]
-游戏行业资讯
-游戏行业
-游戏出海
-手游
-游戏买量
-游戏发行
-
-[广告与游戏]
-游戏广告
-广告变现
+[广告行业]
+广告
+营销
+投放
 买量
+变现
+程序化
+广告优化
+adtech
+advertising
+marketing
+campaign
+programmatic
+performance marketing
+user acquisition
+UA
+
+[游戏行业]
+游戏
+手游
+小游戏
+游戏发行
+游戏出海
+game
+gaming
+mobile game
+game publishing
+game studio
+
+[广告平台]
+admob
+applovin
+ironsource
+unity ads
+pangle
+mintegral
+穿山甲
+聚合变现
+MMP
+归因
+
+[AI广告]
++AI
+广告
+营销
+AIGC
+LLM
+ad creative
+
+[游戏变现]
 IAA
 IAP
+激励视频
+插屏
+banner
+中插
+monetization
+revenue

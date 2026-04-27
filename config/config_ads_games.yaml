@@ -7,7 +7,7 @@ schedule:
   preset: "morning_evening"
 
 platforms:
-  enabled: true
+  enabled: false
   sources:
     - id: "weibo"
       name: "微博"
@@ -37,15 +37,24 @@ rss:
     - id: "adweek"
       name: "Adweek"
       url: "https://www.adweek.com/feed/"
-    - id: "search-engine-land"
-      name: "Search Engine Land"
-      url: "https://searchengineland.com/feed"
+    - id: "search-engine-journal"
+      name: "Search Engine Journal"
+      url: "https://www.searchenginejournal.com/feed/"
     - id: "martech"
       name: "MarTech"
       url: "https://martech.org/feed/"
     - id: "social-media-today"
       name: "Social Media Today"
       url: "https://www.socialmediatoday.com/feeds/news/"
+    - id: "weibo-test-1"
+      name: "Weibo Test Account 1"
+      url: "https://rsshub.app/weibo/user/1642634100"
+    - id: "weibo-test-2"
+      name: "Weibo Test Account 2"
+      url: "https://rsshub.app/weibo/user/1730077315"
+    - id: "weibo-test-3"
+      name: "Weibo Test Account 3"
+      url: "https://rsshub.app/weibo/user/1917363437"
 
 report:
   mode: "incremental"
