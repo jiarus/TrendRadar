@@ -1,0 +1,119 @@
+﻿name: Get Hot News (Ads & Games)
+
+on:
+  schedule:
+    - cron: "43 * * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: crawler-alt-${{ github.ref_name }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  actions: write
+
+jobs:
+  crawl:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+          clean: true
+
+      - name: Check Expiration
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          WORKFLOW_FILE="crawler-alt-frequency.yml"
+          API_URL="repos/${{ github.repository }}/actions/workflows/$WORKFLOW_FILE/runs"
+
+          TOTAL=$(gh api "$API_URL" --jq '.total_count')
+          if [ -z "$TOTAL" ] || [ "$TOTAL" -eq 0 ]; then
+            echo "No previous runs found, skipping expiration check"
+            exit 0
+          fi
+
+          LAST_PAGE=$(( (TOTAL + 99) / 100 ))
+          FIRST_RUN_DATE=$(gh api "$API_URL?per_page=100&page=$LAST_PAGE" --jq '.workflow_runs[-1].created_at')
+
+          if [ -n "$FIRST_RUN_DATE" ]; then
+            CURRENT_TIMESTAMP=$(date +%s)
+            FIRST_RUN_TIMESTAMP=$(date -d "$FIRST_RUN_DATE" +%s)
+            DIFF_SECONDS=$((CURRENT_TIMESTAMP - FIRST_RUN_TIMESTAMP))
+            LIMIT_SECONDS=604800
+
+            if [ $DIFF_SECONDS -gt $LIMIT_SECONDS ]; then
+              echo "Trial expired. Run 'Check In' to renew."
+              gh workflow disable "$WORKFLOW_FILE"
+              exit 1
+            else
+              DAYS_LEFT=$(( (LIMIT_SECONDS - DIFF_SECONDS) / 86400 ))
+              echo "Trial: ${DAYS_LEFT} days left. Run 'Check In' before expiry to renew."
+            fi
+          fi
+
+      - name: Set up Python
+        if: success()
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install uv
+        if: success()
+        uses: astral-sh/setup-uv@v7
+
+      - name: Install dependencies
+        if: success()
+        run: uv sync --frozen --no-dev
+
+      - name: Verify required files
+        if: success()
+        run: |
+          if [ ! -f config/config_ads_games.yaml ]; then
+            echo "Error: Ads & Games config missing"
+            exit 1
+          fi
+          if [ ! -f config/custom/keyword/frequency_words_ads_games.txt ]; then
+            echo "Error: Alt frequency words file missing"
+            exit 1
+          fi
+
+      - name: Run crawler with alt keyword file
+        if: success()
+        env:
+          FEISHU_WEBHOOK_URL: ${{ secrets.FEISHU_WEBHOOK_URL }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          DINGTALK_WEBHOOK_URL: ${{ secrets.DINGTALK_WEBHOOK_URL }}
+          WEWORK_WEBHOOK_URL: ${{ secrets.WEWORK_WEBHOOK_URL }}
+          WEWORK_MSG_TYPE: ${{ secrets.WEWORK_MSG_TYPE }}
+          EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
+          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+          EMAIL_TO: ${{ secrets.EMAIL_TO }}
+          EMAIL_SMTP_SERVER: ${{ secrets.EMAIL_SMTP_SERVER }}
+          EMAIL_SMTP_PORT: ${{ secrets.EMAIL_SMTP_PORT }}
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+          NTFY_SERVER_URL: ${{ secrets.NTFY_SERVER_URL }}
+          NTFY_TOKEN: ${{ secrets.NTFY_TOKEN }}
+          BARK_URL: ${{ secrets.BARK_URL }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          GENERIC_WEBHOOK_URL: ${{ secrets.GENERIC_WEBHOOK_URL }}
+          GENERIC_WEBHOOK_TEMPLATE: ${{ secrets.GENERIC_WEBHOOK_TEMPLATE }}
+          AI_ANALYSIS_ENABLED: ${{ secrets.AI_ANALYSIS_ENABLED }}
+          AI_API_KEY: ${{ secrets.AI_API_KEY }}
+          AI_MODEL: ${{ secrets.AI_MODEL }}
+          AI_API_BASE: ${{ secrets.AI_API_BASE }}
+          S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
+          S3_ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY_ID }}
+          S3_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET_ACCESS_KEY }}
+          S3_ENDPOINT_URL: ${{ secrets.S3_ENDPOINT_URL }}
+          S3_REGION: ${{ secrets.S3_REGION }}
+          CONFIG_PATH: config/config_ads_games.yaml
+          FREQUENCY_WORDS_PATH: config/custom/keyword/frequency_words_ads_games.txt
+          GITHUB_ACTIONS: true
+        run: uv run python -m trendradar

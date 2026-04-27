@@ -1,0 +1,44 @@
+﻿# Alternative keyword file for second GitHub Actions workflow
+# File path: config/custom/keyword/frequency_words_alt.txt
+
+[GLOBAL_FILTER]
+sponsored
+软文
+
+[WORD_GROUPS]
+[广告系统]
+广告系统
+广告平台
+广告引擎
+广告技术
+ad system
+
+[AI+广告]
+AI+广告
+AI 广告
+AIGC 广告
+人工智能 广告
+大模型 广告
+
+[广告投放]
+广告投放
+投放策略
+程序化广告
+程序化投放
+效果广告
+广告优化
+
+[游戏行业资讯]
+游戏行业资讯
+游戏行业
+游戏出海
+手游
+游戏买量
+游戏发行
+
+[广告与游戏]
+游戏广告
+广告变现
+买量
+IAA
+IAP
